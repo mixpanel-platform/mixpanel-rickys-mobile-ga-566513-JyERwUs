@@ -32,12 +32,21 @@
             dateRange = dateSelect.MPDatepicker('value');
 
         if (eventName) {
-          MP.api.segment(eventName, propName, dateRange).done(function(results) {
-            eventGraph.MPChart('setData', results);
-            eventTable.MPTable('setData', results);
-          });
+          var gamePlayed = MP.api.segment('Game Played', propName, dateRange);
+          var levelCompleted = MP.api.segment('Level Completed', propName, dateRange);
+          
+          $.when(gamePlayed, levelCompleted)
+            .done(function(gamePlayed, levelCompleted) {
+              console.log(gamePlayed);
+              console.log(levelCompleted);
+              
+              var results = MP.Data.combine(gamePlayed, levelCompleted);
+              eventGraph.MPChart('setData', results);
+              eventTable.MPTable('setData', results);
+            });
         }
       };
+      
       eventSelect.on('change', function(e, eventName) {
         propSelect.MPPropertySelect('setEvent', eventName);
         $("#by").show();
