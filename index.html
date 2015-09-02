@@ -37,6 +37,7 @@
           var charCreated = MP.api.segment('Character Created', propName, dateRange);
           var appOpened = MP.api.segment('App Open', propName, dateRange);
           
+          // Only execute once each AJAX request has returned
           $.when(gamePlayed, levelCompleted, charCreated, appOpened)
             .done(function(gamePlayed, levelCompleted, charCreated, appOpened) {
               console.log(gamePlayed);
