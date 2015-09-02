@@ -34,13 +34,14 @@
         if (eventName) {
           var gamePlayed = MP.api.segment('Game Played', propName, dateRange);
           var levelCompleted = MP.api.segment('Level Completed', propName, dateRange);
+          var charCreated = MP.api.segment('Character Created', propName, dateRange);
+          var appOpened = MP.api.segment('App Open', propName, dateRange);
           
-          $.when(gamePlayed, levelCompleted)
-            .done(function(gamePlayed, levelCompleted) {
+          $.when(gamePlayed, levelCompleted, charCreated, appOpened)
+            .done(function(gamePlayed, levelCompleted, charCreated, appOpened) {
               console.log(gamePlayed);
-              console.log(levelCompleted);
-              
-              var results = MP.Data.combine(gamePlayed, levelCompleted);
+              var combine = MP.Data.combine;
+              var results = combine(combine(combine(gamePlayed, levelCompleted), charCreated), appOpened);
               eventGraph.MPChart('setData', results);
               eventTable.MPTable('setData', results);
             });
